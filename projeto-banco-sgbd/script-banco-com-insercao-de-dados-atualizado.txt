@@ -1,0 +1,107 @@
+CREATE DATABASE banco;
+USE banco;
+
+CREATE TABLE categoria_cliente(
+cod_categoria_cliente INT NOT NULL AUTO_INCREMENT,
+nome_categoria_cliente VARCHAR(100),
+PRIMARY KEY(cod_categoria_cliente)
+); -- feito
+
+CREATE TABLE agencia(
+num_agencia INT NOT NULL AUTO_INCREMENT,
+nome_agencia VARCHAR(100),
+PRIMARY KEY(num_agencia)
+); -- feito
+
+CREATE TABLE tipo_conta(
+cod_tipo_conta INT NOT NULL AUTO_INCREMENT,
+des_tipo_conta VARCHAR(100),
+PRIMARY KEY(cod_tipo_conta)
+); -- feito
+
+CREATE TABLE cliente(
+cod_cliente INT NOT NULL AUTO_INCREMENT,
+nom_cliente VARCHAR(100),
+num_cpf_cnpj BIGINT(14),
+num_celular BIGINT(14),
+rua VARCHAR(100),
+numero INT,
+bairro VARCHAR(100),
+cep INT,
+cidade VARCHAR(45),
+estado VARCHAR(45),
+PRIMARY KEY(cod_cliente)
+); -- feito
+
+CREATE TABLE conta(
+num_conta INT NOT NULL AUTO_INCREMENT,
+val_saldo DECIMAL(10,2),
+PRIMARY KEY(num_conta)   
+); 
+
+-- colocanco a chave estrangeira cliente_categoria_cod na tabela cliente
+ALTER TABLE cliente ADD COLUMN cliente_categoria_cod INT, ADD FOREIGN KEY (cliente_categoria_cod) REFERENCES categoria_cliente(cod_categoria_cliente);
+-- alterando a tabela conta e adicionando a a chave estrangeira codigo_cliente
+ALTER TABLE conta ADD COLUMN cliente_cod INT, ADD FOREIGN KEY (cliente_cod) REFERENCES cliente(cod_cliente);
+-- alterando a tabela conta e adicionando a a chave estrangeira agencia_num
+ALTER TABLE conta ADD COLUMN agencia_num INT, ADD FOREIGN KEY (agencia_num) REFERENCES agencia(num_agencia);
+-- alterando a tabela conta e adicionando a a chave estrangeira conta_tipo_cod
+ALTER TABLE conta ADD COLUMN conta_tipo_cod INT, ADD FOREIGN KEY (conta_tipo_cod) REFERENCES tipo_conta(cod_tipo_conta);
+
+
+-- 1 - Na tabela Cliente alterar o nome da coluna NUM_CELULAR para TELEFONE
+ALTER TABLE cliente RENAME COLUMN num_celular TO telefone;
+-- 2 - Na tabela Categoria_Cliente vamos incluir o campo “OBSERVACAO” (TEXT)
+ALTER TABLE categoria_cliente ADD COLUMN observacao TEXT;
+-- 3 - Na tabela Cliente vamos incluir o campo “RENDA” (DECIMAL)
+ALTER TABLE cliente ADD COLUMN renda DECIMAL;
+-- 4 - Alterar o tipo de dado da coluna DES_TIPO_CONTA para TEXT
+ALTER TABLE tipo_conta MODIFY COLUMN des_tipo_conta TEXT; 
+-- 5 - Alterar na tabela Agencia o NOM_AGENCIA para VARCHAR (45)
+ALTER TABLE agencia MODIFY COLUMN nome_agencia VARCHAR(45);
+-- 6 - Remover a coluna ESTADO da tabela CLIENTE
+ALTER TABLE cliente DROP COLUMN estado;
+-- 7 - Alterar o nome da tabela CATEGORIA_CLIENTE para CATEGORIA
+ALTER TABLE categoria_cliente RENAME TO categoria;
+-- 8 – Na tabela Tipo_Conta vamos incluir o campo “OBSERVACAO” (TEXT)
+ALTER TABLE tipo_conta ADD COLUMN observacao TEXT;
+
+--  inserindo dados na tabela categoria_cliente que mudou para categoria (fica a seu critério).
+INSERT INTO categoria(nome_categoria_cliente, observacao)
+VALUES
+('Private', 'Cliente com renda acima de um milhão'),
+('Exclusive', 'Cliente com renda acima de dois milhões'),
+('Gold', 'Cliente com renda acima de três milhões'),
+('Básico', 'Cliente com renda acima de 500 mil');
+
+-- inserindo dados na tabela tipo de conta
+INSERT INTO tipo_conta(des_tipo_conta)
+VALUES('Poupança'),
+      ('Corrente');
+-- inserindo dados na tabela agência
+INSERT INTO agencia(nome_agencia)
+VALUES('Campeche'),
+      ('Ingleses'),
+      ('Centro');
+      
+--  inserindo 8 clientes na tabela cliente(fica a seu critério).      
+INSERT INTO cliente(nom_cliente, num_cpf_cnpj, telefone,cliente_categoria_cod)
+VALUES('Ademar Lopes', 65150789003, 88981678914, 1),
+      ('Estevão Bernardes', 66750789003, 89081678915, 3),
+      ('Lucia Maria', 67550789033, 7888978912, 2),
+      ('Maria de Fatima', 09250789003, 99981678914, 4),
+      ('Antonio Augusto', 037507890077, 99981678914, 1),
+      ('Antonio Augusto', 347507890075, 89981678912, 3),
+      ('Pedro Francisco', 207507890078, 11981678914, 2),
+      ('Helena de Fátima', 00375078907, 7998167890, 3);
+
+-- inserindo dados na tabela conta valor do saldo,código do cliente, numéro da agência e o tipo de conta
+INSERT INTO conta(val_saldo,cliente_cod,agencia_num,conta_tipo_cod)
+VALUES(10000.00, 1,1,1 ),
+	(20000.00, 2,2,1),
+	(30000.00, 3,3,2),
+	(30000.00, 4,3,1),
+	(7000.00, 5,2,2),
+	(30000.000, 6,1,2),
+	(89000.00, 7,1,2),
+	(790000.000, 8,2,1);

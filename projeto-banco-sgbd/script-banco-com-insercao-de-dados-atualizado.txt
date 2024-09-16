@@ -105,3 +105,12 @@ VALUES(10000.00, 1,1,1 ),
 	(30000.000, 6,1,2),
 	(89000.00, 7,1,2),
 	(790000.000, 8,2,1);
+
+ALTER TABLE cliente ADD COLUMN email VARCHAR(145);
+
+INSERT INTO cliente(nom_cliente,email,telefone,cliente_categoria_cod)
+VALUES('Neymar', 'neymar@gmail.com', 11111111111, 2),
+	('Coutinho', 'coutinho@gmail.com', 22222222222, 1),
+	('Casemiro','casemiro@gmail.com', 33333333333, 3),
+	('Hebe','hebe@gmail.com',33333333333,2);
+	
